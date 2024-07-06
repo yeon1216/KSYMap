@@ -1,6 +1,10 @@
 package com.example.ksymap.ui.map
 
+import android.graphics.PointF
+import android.os.Bundle
+import android.view.View
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,19 +23,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.example.ksymap.R
 import com.example.ksymap.ui.KSYMapAppState
 import kotlinx.coroutines.launch
@@ -40,6 +52,9 @@ import com.example.ksymap.ui.theme.*
 import com.example.ksymap.ui.theme.Gray700
 import com.example.ksymap.ui.theme.KSYTextStyles
 import com.example.ksymap.ui.theme.Shapes
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.MapView
+import com.naver.maps.map.NaverMap
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -96,6 +111,7 @@ private fun MapView(
         modifier = modifier
             .fillMaxSize()
     ) {
+        NaverMapComposable()
         Column(
             modifier = modifier
                 .padding(top = 16.dp)
@@ -148,6 +164,7 @@ fun MapTopBarView(
             Box(
                 modifier = modifier
                     .weight(1f)
+                    .background(White)
                     .clickable {
                         onClickSearchBar()
                     }
@@ -216,4 +233,53 @@ fun SearchBarView(
 
         }
     }
+}
+
+@Composable
+fun NaverMapComposable() {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val coroutineScope = rememberCoroutineScope()
+
+    // Create a remember variable for MapView
+    val mapView = remember {
+        MapView(context).apply {
+            // Initialize the MapView
+            onCreate(Bundle())
+
+            // Set up lifecycle observer
+            getMapAsync { naverMap ->
+                // Handle map setup asynchronously if needed
+            }
+        }
+    }
+
+    // LifecycleEventObserver to handle lifecycle events
+    val lifecycleObserver = remember {
+        LifecycleEventObserver { _, event ->
+            coroutineScope.launch {
+                when (event) {
+                    Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
+                    Lifecycle.Event.ON_START -> mapView.onStart()
+                    Lifecycle.Event.ON_RESUME -> mapView.onResume()
+                    Lifecycle.Event.ON_PAUSE -> mapView.onPause()
+                    Lifecycle.Event.ON_STOP -> mapView.onStop()
+                    Lifecycle.Event.ON_DESTROY -> mapView.onDestroy()
+                    // Handle other lifecycle events if needed
+                    else -> Unit
+                }
+            }
+        }
+    }
+
+    // Add lifecycle observer and remove it when Composable is disposed
+    DisposableEffect(Unit) {
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
+    // Wrap the MapView in AndroidView and return it
+    AndroidView(factory = { mapView })
 }

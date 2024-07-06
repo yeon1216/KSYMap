@@ -27,7 +27,7 @@
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="@string/naver_map_client_id" />
+            android:value="kar2xak7wc" />
 
     </application>
 
