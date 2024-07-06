@@ -45,7 +45,7 @@ fun MainScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
-    Main(
+    MainView(
         viewState = viewState,
         onClickMapBtn = {
             viewModel.setEvent(MainEvent.OnClickMapBtn)
@@ -69,7 +69,7 @@ fun MainScreen(
 }
 
 @Composable
-private fun Main(
+private fun MainView(
     viewState: MainViewState,
     onClickMapBtn: () -> Unit,
     modifier: Modifier

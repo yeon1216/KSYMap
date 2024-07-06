@@ -9,7 +9,7 @@ class MapContract {
 
     data class MapViewState(
         val loadState: KSYLoadState = KSYLoadState.SUCCESS,
-        val search: String = "스윙",
+        val search: String = "",
         val error: Throwable? = null,
         val isSearchFocused: Boolean = false
     ) : ViewState

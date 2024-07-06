@@ -13,6 +13,12 @@ class MapViewModel @Inject constructor() : BaseViewModel<MapViewState, MapSideEf
             is MapEvent.InitScreen -> {
 
             }
+            is MapEvent.OnClickBackIcon -> {
+                sendEffect({ MapSideEffect.NavigateUp })
+            }
+            is MapEvent.OnClickSearchBar -> {
+
+            }
             else -> {}
         }
     }
