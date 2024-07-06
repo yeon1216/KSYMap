@@ -16,6 +16,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // https://developers.naver.com/forum/posts/35904
+//        maven {
+//            url 'https://naver.jfrog.io/artifactory/maven/'
+//        }
+        maven {
+            url 'https://repository.map.naver.com/archive/maven'
+        }
     }
 }
 

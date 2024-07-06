@@ -18,10 +18,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-//        def propertiesFile = rootProject.file("secret.properties")
-//        def properties = new Properties()
-//        properties.load(new FileInputStream(propertiesFile))
-//        buildConfigField("String", "KAKAO_API_TOKEN", "\"${properties['kakao.api.token']}\"")
+        def propertiesFile = rootProject.file("local.properties")
+        def properties = new Properties()
+        properties.load(new FileInputStream(propertiesFile))
+        buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"${properties['naver.map.client.id']}\"")
 
         vectorDrawables {
             useSupportLibrary true
@@ -118,5 +118,8 @@ dependencies {
     // paging
     implementation "androidx.paging:paging-runtime:$paging_version"
     implementation "androidx.paging:paging-compose:$paging_version"
+
+    // 네이버 지도 SDK
+    implementation "com.naver.maps:map-sdk:3.18.0"
 
 }
