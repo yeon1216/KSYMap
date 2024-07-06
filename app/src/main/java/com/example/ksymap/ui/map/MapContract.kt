@@ -4,7 +4,6 @@ import com.example.ksymap.ui.base.KSYLoadState
 import com.example.ksymap.ui.base.ViewEvent
 import com.example.ksymap.ui.base.ViewSideEffect
 import com.example.ksymap.ui.base.ViewState
-import com.example.ksymap.ui.main.MainContract.MainSideEffect
 
 class MapContract {
 

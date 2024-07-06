@@ -17,12 +17,12 @@ class PlaceSearchContract {
     sealed class PlaceSearchSideEffect: ViewSideEffect {
         object NavigateUp : PlaceSearchSideEffect()
         data class ShowSnackBar(val resId: Int) : PlaceSearchSideEffect()
+        data class NavigateToPlaceDetail(val query: String) : PlaceSearchSideEffect()
     }
 
     sealed class PlaceSearchEvent: ViewEvent {
         object InitScreen: PlaceSearchEvent()
         data class OnSearch(val query: String): PlaceSearchEvent()
-        object OnClickSearchBar: PlaceSearchEvent()
         object OnClickBackIcon: PlaceSearchEvent()
     }
 

@@ -17,6 +17,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.room.util.query
+import com.example.ksymap.ui.KSYMapDestinations.PLACE_DETAIL_ROUTE
 import com.example.ksymap.ui.utils.SnackbarManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -26,6 +28,7 @@ object KSYMapDestinations {
     const val MAIN_ROUTE = "main"
     const val MAP_ROUTE = "main/map"
     const val PLACE_SEARCH_ROUTE = "main/map/search"
+    const val PLACE_DETAIL_ROUTE = "main/map/search/detail"
 
 }
 
@@ -79,6 +82,12 @@ class KSYMapAppState(
     fun navigateToPlaceSearch(from: NavBackStackEntry) {
         if (from.lifecycleIsResumed()) {
             navController.navigate(KSYMapDestinations.PLACE_SEARCH_ROUTE)
+        }
+    }
+
+    fun navigateToPlaceSearch(query: String, from: NavBackStackEntry) {
+        if (from.lifecycleIsResumed()) {
+            navController.navigate("$PLACE_DETAIL_ROUTE/$query")
         }
     }
 

@@ -16,7 +16,9 @@ class PlaceSearchViewModel @Inject constructor() : BaseViewModel<PlaceSearchView
             is PlaceSearchEvent.OnClickBackIcon -> {
                 sendEffect({ PlaceSearchSideEffect.NavigateUp })
             }
-            else -> {}
+            is PlaceSearchEvent.OnSearch -> {
+                sendEffect({ PlaceSearchSideEffect.NavigateToPlaceDetail(event.query) })
+            }
         }
     }
 }

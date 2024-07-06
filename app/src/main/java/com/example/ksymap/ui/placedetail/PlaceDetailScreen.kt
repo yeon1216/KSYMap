@@ -1,4 +1,4 @@
-package com.example.ksymap.ui.placesearch
+package com.example.ksymap.ui.placedetail
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,6 +17,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,12 +36,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.ksymap.R
 import com.example.ksymap.ui.KSYMapAppState
 import kotlinx.coroutines.launch
-import com.example.ksymap.ui.placesearch.PlaceSearchContract.*
+import com.example.ksymap.ui.placedetail.PlaceDetailContract.*
+import com.example.ksymap.ui.theme.Black
 import com.example.ksymap.ui.theme.Gray500
 import com.example.ksymap.ui.theme.Gray600
 import com.example.ksymap.ui.theme.Gray700
@@ -49,53 +52,48 @@ import com.example.ksymap.ui.theme.Purple500
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun PlaceSearchScreen(
+fun PlaceDetailScreen(
     appState: KSYMapAppState,
-    navigateToPlaceDetail: (String) -> Unit,
-    viewModel: PlaceSearchViewModel = hiltViewModel()
+    query: String,
+    viewModel: PlaceDetailViewModel = hiltViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val scope = rememberCoroutineScope()
 
-    PlaceSearchView(
+    PlaceDetailView(
         viewState = viewState,
         onClickBackIcon = {
-            viewModel.setEvent(PlaceSearchEvent.OnClickBackIcon)
+            viewModel.setEvent(PlaceDetailEvent.OnClickBackIcon)
         },
-        onSearch = { query ->
-            viewModel.setEvent(PlaceSearchEvent.OnSearch(query))
-        },
+        query = query,
         modifier = Modifier
     )
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                is PlaceSearchSideEffect.NavigateUp -> {
+                is PlaceDetailSideEffect.NavigateUp -> {
                     appState.upPress()
                 }
-                is PlaceSearchSideEffect.ShowSnackBar -> {
+                is PlaceDetailSideEffect.ShowSnackBar -> {
                     scope.launch {
                         appState.showSnackbarMessage(effect.resId)
                     }
-                }
-                is PlaceSearchSideEffect.NavigateToPlaceDetail -> {
-                    navigateToPlaceDetail(effect.query)
                 }
             }
         }
     }
 
     LaunchedEffect(key1 = true) {
-        viewModel.setEvent(PlaceSearchEvent.InitScreen)
+        viewModel.setEvent(PlaceDetailEvent.InitScreen)
     }
 }
 
 @Composable
-private fun PlaceSearchView(
-    viewState: PlaceSearchViewState,
+private fun PlaceDetailView(
+    viewState: PlaceDetailViewState,
+    query: String,
     onClickBackIcon: () -> Unit,
-    onSearch: (String) -> Unit,
     modifier: Modifier
 ) {
     Box(
@@ -106,9 +104,9 @@ private fun PlaceSearchView(
             modifier = modifier
                 .padding(top = 16.dp)
         ) {
-            PlaceSearchTopBarView(
+            PlaceDetailTopBarView(
+                query = query,
                 onClickBackIcon,
-                onSearch,
                 modifier = modifier
             )
             Spacer(modifier = modifier.weight(1f))
@@ -117,16 +115,15 @@ private fun PlaceSearchView(
 }
 
 @Composable
-fun PlaceSearchTopBarView(
+fun PlaceDetailTopBarView(
+    query: String,
     onClickBackIcon: () -> Unit,
-    onSearch: (String) -> Unit,
     modifier: Modifier
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .padding(start = 16.dp)
     ) {
 
         Row(
@@ -136,15 +133,6 @@ fun PlaceSearchTopBarView(
         ) {
             Box(
                 modifier = modifier
-                    .weight(1f)
-            ) {
-                SearchTextFieldView(
-                    onSearch,
-                    modifier = modifier
-                )
-            }
-            Box(
-                modifier = modifier
                     .size(56.dp)
                     .clickable {
                         onClickBackIcon()
@@ -152,58 +140,29 @@ fun PlaceSearchTopBarView(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Close,
-                    contentDescription = "close_icon",
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "arrow_icon",
                     modifier = modifier.size(24.dp),
                     tint = Gray700
                 )
             }
+            Spacer(modifier = modifier.weight(1f))
+        }
+
+        Row(
+            modifier = modifier
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = modifier.weight(1f))
+            Text(
+                text = query,
+                style = KSYTextStyles.subTitle1Bold(Black),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = modifier.weight(1f))
         }
 
 
     }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-private fun SearchTextFieldView(
-    onSearch: (query: String) -> Unit,
-    modifier: Modifier
-) {
-
-    val keyboardController = LocalSoftwareKeyboardController.current
-    var queryValue by remember { mutableStateOf("") }
-    val focusRequester = remember { FocusRequester() }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
-    OutlinedTextField(
-        modifier = modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
-        value = queryValue,
-        onValueChange = {
-            queryValue = it
-        },
-        singleLine = true,
-        placeholder = {
-            Text(
-                text = stringResource(id = R.string.map_search_placeholder),
-                style = KSYTextStyles.captionRegular(Gray600)
-            )
-        },
-        keyboardActions = KeyboardActions(onSearch = {
-            onSearch(queryValue)
-            keyboardController?.hide()
-        }),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Purple500,
-            unfocusedBorderColor = Gray500,
-            cursorColor = Purple500
-        ),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
-    )
-
 }
