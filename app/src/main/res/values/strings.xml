@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">KSYMap</string>
+
+    <string name="map_btn">지도 검색하기</string>
 </resources>
