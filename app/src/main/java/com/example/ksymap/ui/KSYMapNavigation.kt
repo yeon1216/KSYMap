@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.ksymap.ui.main.MainScreen
+import com.example.ksymap.ui.map.MapScreen
 
 @Composable
 fun KSYMapNavigation(
@@ -25,6 +26,15 @@ fun KSYMapNavigation(
                 navigateToMap = { appState.navigateToMap(backStackEntry) }
             )
         }
+
+        composable(
+            route = KSYMapDestinations.MAP_ROUTE
+        ) { backStackEntry ->
+            MapScreen(
+                appState = appState
+            )
+        }
+
     }
 
 }
