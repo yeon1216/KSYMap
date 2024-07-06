@@ -1,5 +1,6 @@
 package com.example.ksymap.di
 
+import com.example.ksymap.data.remote.api.TmapService
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,21 +27,21 @@ class NetworkModule {
             .addConverterFactory(gsonConverterFactory)
             .build()
 
-//    @Singleton
-//    @Provides
-//    fun provideBookService(
-//        retrofit: Retrofit,
-//    ): BookService {
-//        return retrofit.create(BookService::class.java)
-//    }
+    @Singleton
+    @Provides
+    fun provideTmapService(
+        retrofit: Retrofit,
+    ): TmapService {
+        return retrofit.create(TmapService::class.java)
+    }
 
 }
 
 object HttpRoutes {
 
-    private const val KAKAO_BASE_URL = "https://dapi.kakao.com"
+    private const val TMAP_BASE_URL = "https://apis.openapi.sk.com/tmap"
     fun getBaseUrl(): String {
-        return KAKAO_BASE_URL
+        return TMAP_BASE_URL
     }
 
 }
