@@ -4,6 +4,7 @@ import com.example.ksymap.ui.base.KSYLoadState
 import com.example.ksymap.ui.base.ViewEvent
 import com.example.ksymap.ui.base.ViewSideEffect
 import com.example.ksymap.ui.base.ViewState
+import com.example.ksymap.ui.main.MainContract.MainSideEffect
 
 class MapContract {
 
@@ -17,6 +18,7 @@ class MapContract {
     sealed class MapSideEffect: ViewSideEffect {
         object NavigateUp : MapSideEffect()
         data class ShowSnackBar(val resId: Int) : MapSideEffect()
+        object NavigateToSearch : MapSideEffect()
     }
 
     sealed class MapEvent: ViewEvent {

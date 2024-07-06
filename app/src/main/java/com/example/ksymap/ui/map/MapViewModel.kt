@@ -17,7 +17,7 @@ class MapViewModel @Inject constructor() : BaseViewModel<MapViewState, MapSideEf
                 sendEffect({ MapSideEffect.NavigateUp })
             }
             is MapEvent.OnClickSearchBar -> {
-
+                sendEffect({ MapSideEffect.NavigateToSearch })
             }
             else -> {}
         }

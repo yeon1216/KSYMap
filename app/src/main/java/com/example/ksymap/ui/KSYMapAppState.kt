@@ -25,6 +25,7 @@ object KSYMapDestinations {
 
     const val MAIN_ROUTE = "main"
     const val MAP_ROUTE = "main/map"
+    const val PLACE_SEARCH_ROUTE = "main/map/search"
 
 }
 
@@ -75,11 +76,11 @@ class KSYMapAppState(
             navController.navigate(KSYMapDestinations.MAP_ROUTE)
         }
     }
-//    fun navigateToFavorite(from: NavBackStackEntry) {
-//        if (from.lifecycleIsResumed()) {
-//            navController.navigate(SearchBookDestinations.FAVORITE_ROUTE)
-//        }
-//    }
+    fun navigateToPlaceSearch(from: NavBackStackEntry) {
+        if (from.lifecycleIsResumed()) {
+            navController.navigate(KSYMapDestinations.PLACE_SEARCH_ROUTE)
+        }
+    }
 
 }
 

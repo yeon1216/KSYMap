@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun MapScreen(
     appState: KSYMapAppState,
+    navigateToPlaceSearch: () -> Unit,
     viewModel: MapViewModel = hiltViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -71,6 +72,9 @@ fun MapScreen(
                     scope.launch {
                         appState.showSnackbarMessage(effect.resId)
                     }
+                }
+                is MapSideEffect.NavigateToSearch -> {
+                    navigateToPlaceSearch()
                 }
             }
         }
@@ -148,7 +152,7 @@ fun MapTopBarView(
                         onClickSearchBar()
                     }
             ) {
-                SearchView(
+                SearchBarView(
                     search = search
                 )
             }
@@ -159,7 +163,7 @@ fun MapTopBarView(
 }
 
 @Composable
-fun SearchView(
+fun SearchBarView(
     search: String,
     modifier: Modifier = Modifier
 ) {
