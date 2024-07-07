@@ -1,12 +1,13 @@
 package com.example.ksymap.data.remote.api
 
 import com.example.ksymap.data.remote.dto.TmapResponse
+import com.getkeepsafe.relinker.BuildConfig
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TmapService {
 
-    @GET("/pois")
+    @GET("pois")
     suspend fun searchPOIs(
         @Query("version") version: String,
         @Query("page") page: Int,
@@ -24,7 +25,7 @@ interface TmapService {
         @Query("centerLat") centerLat: Double? = null,
         @Query("poiGroupYn") poiGroupYn: String? = "N",
         @Query("callback") callback: String? = null,
-        @Query("appKey") appKey: String
+        @Query("appKey") appKey: String = "Tuc0rlUnPx61cYkmru7QF5t25lJZwhbq4OnzB25R"
     ): TmapResponse // Define your response class accordingly
-
+//    Tuc0rlUnPx61cYkmru7QF5t25lJZwhbq4OnzB25R
 }

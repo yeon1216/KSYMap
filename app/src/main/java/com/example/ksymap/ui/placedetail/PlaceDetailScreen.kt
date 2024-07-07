@@ -86,6 +86,7 @@ fun PlaceDetailScreen(
 
     LaunchedEffect(key1 = true) {
         viewModel.setEvent(PlaceDetailEvent.InitScreen)
+        viewModel.setEvent(PlaceDetailEvent.OnSearch(query = query))
     }
 }
 

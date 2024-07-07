@@ -39,7 +39,7 @@ class NetworkModule {
 
 object HttpRoutes {
 
-    private const val TMAP_BASE_URL = "https://apis.openapi.sk.com/tmap"
+    private const val TMAP_BASE_URL = "https://apis.openapi.sk.com/tmap/"
     fun getBaseUrl(): String {
         return TMAP_BASE_URL
     }

@@ -29,8 +29,7 @@ class PlaceRepository @Inject constructor(
         centerLon: Double? = null,
         centerLat: Double? = null,
         poiGroupYn: String? = "N",
-        callback: String? = null,
-        appKey: String
+        callback: String? = null
     ): JobResult<TmapResponse> {
         return placeRemoteSource.searchBooks(
             query = query,
@@ -48,8 +47,7 @@ class PlaceRepository @Inject constructor(
             centerLon = centerLon,
             centerLat = centerLat,
             poiGroupYn = poiGroupYn,
-            callback = callback,
-            appKey = appKey
+            callback = callback
         )
     }
 

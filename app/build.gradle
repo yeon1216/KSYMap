@@ -22,6 +22,7 @@ android {
         def properties = new Properties()
         properties.load(new FileInputStream(propertiesFile))
         buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"${properties['naver.map.client.id']}\"")
+        buildConfigField("String", "T_MAP_APP_KEY", "\"${properties['t.map.app.key']}\"")
 
         vectorDrawables {
             useSupportLibrary true
