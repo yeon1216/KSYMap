@@ -1,6 +1,6 @@
 # How to build #
 
-빌드 전, 'local.properties' 파일을 생성하여 다음과 같이 API KEY 값을 추가해야 합니다.
+빌드 전, 'local.properties' 파일에 다음과 같이 API KEY 값을 추가해야 합니다.
 ```
 # local.properties
 
